@@ -1,0 +1,20 @@
+body {
+  background-color: #f4f4f4;
+}
+
+.body {
+  min-height: 100vh;
+  padding: 0 1rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.g-2 {
+  gap: 0.5rem;
+}
