@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useNavigation } from "react-router";
+import { useNavigate } from "react-router";
 import Layout from "../components/Layout";
 import GoBack from "../components/Layout/GoBack";
 import styles from "../styles/form.module.css";
@@ -8,19 +8,23 @@ const Add = () => {
   const [phone, setPhone] = useState("");
   const [location, setLocation] = useState("");
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const contactsArr = JSON.parse(localStorage.getItem("contacts")) || [];
 
-    const contact = JSON.stringify({
+    const contact = {
       name,
       phone,
       location,
       email,
-    });
+    };
     contactsArr.push(contact);
     localStorage.setItem("contacts", JSON.stringify(contactsArr));
+    if (window.confirm("You have successfully added a contact")) {
+      navigate("/");
+    }
   };
   return (
     <Layout>
@@ -59,6 +63,7 @@ const Add = () => {
           <input
             className={styles.input}
             required
+            type="email"
             placeholder="Enter Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

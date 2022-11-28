@@ -6,11 +6,11 @@ const Contacts = () => {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
-    const contactsFromStorage = [
-      ...JSON.parse(localStorage.getItem("contacts")),
-    ];
+    const contactsFromStorage = localStorage.getItem("contacts");
 
-    setContacts(contactsFromStorage);
+    if (contactsFromStorage) {
+      setContacts([...JSON.parse(contactsFromStorage)]);
+    }
   }, []);
   return (
     <div>
@@ -18,11 +18,13 @@ const Contacts = () => {
         <button>Add +</button>
       </Link>
       <div className={styles.contacts_wrapper}>
-        {contacts.map((contact, index) => {
-          const parsed = JSON.parse(contact);
+        {contacts.length === 0 && (
+          <p className="alert">You have no saved contacts, please add some</p>
+        )}
+        {contacts?.map((contact, index) => {
           return (
             <p>
-              <Link to={`/contacts/${index}`}>{parsed.name}</Link>
+              <Link to={`/contacts/${index}`}>{contact.name}</Link>
             </p>
           );
         })}

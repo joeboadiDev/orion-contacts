@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Contact from "../components/Contacts/Contact";
 import Layout from "../components/Layout";
 
@@ -8,14 +8,26 @@ import GoBack from "../components/Layout/GoBack";
 import { Link } from "react-router-dom";
 const Single = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleDelete = () => {
-    window.confirm("Are you sure you want to delete");
+    if (window.confirm("Are you sure you want to delete")) {
+      const contacts = JSON.parse(localStorage.getItem("contacts"));
+      const newContacts = contacts.filter(
+        (item, index) => index !== Number(id) && item
+      );
+
+      localStorage.setItem("contacts", JSON.stringify(newContacts));
+      alert("Contact deleted");
+      setTimeout(() => {
+        navigate(-1);
+      }, 500);
+    }
   };
   const [contact, setContact] = useState("");
   useEffect(() => {
     const contactsFromStorage = JSON.parse(localStorage.getItem("contacts"));
-    setContact(JSON.parse(contactsFromStorage[id]));
+    setContact(contactsFromStorage[id]);
   }, [id]);
   return (
     <Layout>

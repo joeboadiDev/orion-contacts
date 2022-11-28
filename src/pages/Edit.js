@@ -1,39 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Layout from "../components/Layout";
 import GoBack from "../components/Layout/GoBack";
 import styles from "../styles/form.module.css";
 const Edit = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [person, setPerson] = useState({});
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [location, setLocation] = useState("");
   const [email, setEmail] = useState("");
+
   useEffect(() => {
     const contactsFromStorage = JSON.parse(localStorage.getItem("contacts"));
-    setPerson(JSON.parse(contactsFromStorage[id]));
-    setName(person.name);
+    setPerson(contactsFromStorage[id]);
+  }, [id]);
+  useEffect(() => {
     setEmail(person.email);
-    setLocation(person.location);
     setPhone(person.phone);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, person.phone]);
+    setLocation(person.location);
+    setName(person.name);
+  }, [id, person]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let contactsArr = JSON.parse(localStorage.getItem("contacts")) || [];
 
-    const contact = JSON.stringify({
+    console.log("old", contactsArr);
+
+    const contact = {
       name,
       phone,
       location,
       email,
+    };
+
+    let edited = contactsArr.map((item, index) => {
+      if (index === Number(id)) {
+        return contact;
+      } else {
+        return item;
+      }
     });
-    // contactsArr = contactsArr.map((item,index)=> {if(item===JSON.parse(contactsArr[id])){
-    //   return contact;
-    // }})
-    localStorage.setItem("contacts", JSON.stringify(contactsArr));
+
+    console.log("new", edited);
+
+    localStorage.setItem("contacts", JSON.stringify(edited));
+    if (window.confirm("Contact Updated")) {
+      navigate(-1);
+    }
   };
   return (
     <Layout>
@@ -44,8 +60,8 @@ const Edit = () => {
           <input
             className={styles.input}
             required
+            defaultValue={person.name}
             placeholder="Enter Name"
-            value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
@@ -55,8 +71,7 @@ const Edit = () => {
             required
             placeholder="Enter Phone"
             type="number"
-            defaultValue={phone}
-            value={phone}
+            defaultValue={person.phone}
             onChange={(e) => setPhone(e.target.value)}
           />
         </div>
@@ -64,8 +79,8 @@ const Edit = () => {
           <input
             className={styles.input}
             required
+            defaultValue={person.location}
             placeholder="Enter Location"
-            value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
         </div>
@@ -73,8 +88,9 @@ const Edit = () => {
           <input
             className={styles.input}
             required
+            type="email"
+            defaultValue={person.email}
             placeholder="Enter Email"
-            value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
