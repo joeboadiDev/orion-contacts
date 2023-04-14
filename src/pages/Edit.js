@@ -95,7 +95,7 @@ const Edit = () => {
           />
         </div>
 
-        <button type="submit">Edit</button>
+        <button type="submit">Update</button> <!--edit button on line 98 changed "update"-->
       </form>
     </Layout>
   );
