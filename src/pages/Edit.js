@@ -94,8 +94,8 @@ const Edit = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-
-        <button type="submit">Edit</button>
+        <!--edit btn changed to update btn-->
+        <button type="submit">Update</button>
       </form>
     </Layout>
   );
